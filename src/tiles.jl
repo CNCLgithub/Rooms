@@ -6,6 +6,7 @@ export Tile,
     wall_tile,
     obstacle_tile
 
+import Base.convert
 
 """
 Abstract type for tile
@@ -92,6 +93,11 @@ Base.show(io::IO, ::Obstacle) = Base.print(io, '◆')
 Base.convert(::Type{Symbol}, ::Floor) = :floor
 Base.convert(::Type{Symbol}, ::Wall) = :wall
 Base.convert(::Type{Symbol}, ::Obstacle) = :obstacle
-Base.convert(::Type{Floor}, s::Symbol) = floor_tile
-Base.convert(::Type{Wall}, s::Symbol) = wall_tile
-Base.convert(::Type{Obstacle}, s::Symbol) = obstacle_tile
+
+const tile_d = Dict{Symbol, Tile}(
+    :wall => wall_tile,
+    :floor => floor_tile,
+    :obstacle => obstacle_tile,
+)
+Base.convert(::Type{Tile}, s::Symbol) = tile_d[s]
+Base.convert(::Type{Tile}, s::String) = tile_d[Symbol(s)]
